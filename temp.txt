@@ -1,0 +1,73 @@
+class MerkleTree {
+    constructor(leaves, concat) {
+        this.leaves = leaves;
+        this.concat = concat;
+    }
+    getRoot() {
+        return this.concat(this.leaves[0], this.leaves[1]);
+    }
+}
+
+module.exports = MerkleTree;
+
+
+##
+
+class MerkleTree {
+    constructor(leaves, concat) {
+        this.leaves=leaves;
+        this.concat = concat;
+    }
+    
+    getRoot() {
+        let temp = [];
+        temp = this.combine(this.leaves);
+        while(true){
+            if(temp.length > 1){
+                temp = this.combine(temp);
+            }
+            return temp[0]
+        }
+    }
+    combine(arr){
+        let temp = [];
+        let leafNodes = arr;
+        for (let i = 0; i < leafNodes.length; i + 2){
+            temp.push(this.concat(leafNodes[i], leafNodes[i+1]));
+        }
+        return temp;
+    }
+
+}
+###
+class MerkleTree {
+    constructor(leaves, concat) {
+        this.leaves = leaves;
+        this.concat = concat;
+    }
+    getRoot(leaves = this.leaves) {
+        if (leaves.length === 1) {
+            return leaves[0];
+        }
+        const layer = [];
+        for (let i = 0; i < leaves.length; i += 2) {
+            const left = leaves[i];
+            const right = leaves[i + 1];
+            layer.push(this.concat(left, right));
+        }
+        return this.getRoot(layer);
+    }
+}
+
+module.exports = MerkleTree;
+
+
+          Root 
+        /      \
+    ABCD        EFGHIJ
+     |          /    \
+    ABCD     EFGH     IJ
+    / \      /   \     |
+   AB  CD   EF   GH   IJ
+  / \  / \  / \  / \  / \      
+  A B  C D  E F  G H  I J
